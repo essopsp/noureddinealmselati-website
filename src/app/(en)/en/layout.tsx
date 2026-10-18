@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import { getDictionary } from "@/i18n/dictionaries";
 import { Chrome } from "@/components/site/Chrome";
-import { CloudflareAnalytics } from "@/components/site/CloudflareAnalytics";
 import { SITE_URL } from "@/lib/seo";
 
 const dict = getDictionary("en");
@@ -34,7 +33,6 @@ export default function EnRootLayout({
         <Chrome locale="en" dict={dict}>
           {children}
         </Chrome>
-        <CloudflareAnalytics />
       </body>
     </html>
   );
