@@ -22,7 +22,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.151.1"
   },
   "description": "الموقع الشخصي للقارئ نور الدين المسلاتي"
 }

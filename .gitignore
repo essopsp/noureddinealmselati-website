@@ -20,3 +20,6 @@ out/
 *.log
 tsconfig.tsbuildinfo
 .DS_Store
+
+# Cloudflare API token — never commit
+.cf_token
