@@ -89,6 +89,24 @@
       }
     ]
   },
+  "display": {
+    "title": "إعدادات العرض",
+    "theme": "المظهر",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام",
+    "textSize": "حجم الخط",
+    "sizeBase": "عادي",
+    "sizeLarge": "كبير",
+    "sizeXLarge": "أكبر"
+  },
+  "reader": {
+    "title": "نص السورة",
+    "toggle": "إظهار النص",
+    "note": "نص المصحف برواية قالون عن نافع (بالعربية).",
+    "attributionPrefix": "النص: مصحف رواية قالون — Quranpedia / KFGQPC، برخصة CC BY-SA 4.0.",
+    "source": "المصدر"
+  },
   "footer": {
     "rights": "جميع الحقوق محفوظة",
     "riwayahLine": "الختمة الكاملة برواية قالون عن نافع"

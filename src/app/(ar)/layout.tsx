@@ -3,6 +3,7 @@ import "@/app/globals.css";
 import { getDictionary } from "@/i18n/dictionaries";
 import { Chrome } from "@/components/site/Chrome";
 import { SITE_URL } from "@/lib/seo";
+import { DISPLAY_INIT_SCRIPT } from "@/lib/display";
 
 const dict = getDictionary("ar");
 
@@ -28,8 +29,9 @@ export default function ArRootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ar" dir="rtl" data-locale="ar">
+    <html lang="ar" dir="rtl" data-locale="ar" suppressHydrationWarning>
       <body className="min-h-dvh bg-bg text-ink">
+        <script dangerouslySetInnerHTML={{ __html: DISPLAY_INIT_SCRIPT }} />
         <Chrome locale="ar" dict={dict}>
           {children}
         </Chrome>

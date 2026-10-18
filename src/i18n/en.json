@@ -89,6 +89,24 @@
       }
     ]
   },
+  "display": {
+    "title": "Display settings",
+    "theme": "Appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "textSize": "Text size",
+    "sizeBase": "Normal",
+    "sizeLarge": "Large",
+    "sizeXLarge": "Larger"
+  },
+  "reader": {
+    "title": "Surah text",
+    "toggle": "Show text",
+    "note": "Mushaf text in the Qaloon 'an Nafi' narration (Arabic).",
+    "attributionPrefix": "Text: Qaloon mushaf edition — Quranpedia / KFGQPC, licensed CC BY-SA 4.0.",
+    "source": "Source"
+  },
   "footer": {
     "rights": "All rights reserved",
     "riwayahLine": "The complete khatmah in Qaloon 'an Nafi' narration"

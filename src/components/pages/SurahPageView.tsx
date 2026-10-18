@@ -7,6 +7,7 @@ import { getSurah } from "@/lib/data";
 import { audioUrl } from "@/lib/data";
 import { formatDurationLong, formatNumber, toArabicDigits } from "@/lib/format";
 import { SurahActions } from "@/components/surah-page/SurahActions";
+import { AyahReader } from "@/components/surah-page/AyahReader";
 import { SITE_URL } from "@/lib/seo";
 import { ChevronStart } from "@/components/ui/icons";
 import { Motif } from "@/components/ui/Motif";
@@ -106,6 +107,8 @@ export function SurahPageView({
 
         <Motif className="mt-10" />
       </div>
+
+      <AyahReader surah={surah.number} locale={locale} dict={dict} />
 
       <nav
         aria-label={dict.nav.surahs}

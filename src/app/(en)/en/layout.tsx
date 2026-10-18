@@ -3,6 +3,7 @@ import "@/app/globals.css";
 import { getDictionary } from "@/i18n/dictionaries";
 import { Chrome } from "@/components/site/Chrome";
 import { SITE_URL } from "@/lib/seo";
+import { DISPLAY_INIT_SCRIPT } from "@/lib/display";
 
 const dict = getDictionary("en");
 
@@ -28,8 +29,9 @@ export default function EnRootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" dir="ltr" data-locale="en">
+    <html lang="en" dir="ltr" data-locale="en" suppressHydrationWarning>
       <body className="min-h-dvh bg-bg text-ink">
+        <script dangerouslySetInnerHTML={{ __html: DISPLAY_INIT_SCRIPT }} />
         <Chrome locale="en" dict={dict}>
           {children}
         </Chrome>

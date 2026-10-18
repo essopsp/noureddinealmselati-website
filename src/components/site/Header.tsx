@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUi } from "./UiProvider";
+import { DisplaySettings } from "./DisplaySettings";
 import { href, otherLocale } from "@/i18n/config";
 import { GlobeIcon } from "@/components/ui/icons";
 
@@ -54,6 +55,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
+          <DisplaySettings />
           <Link
             href={href(other, bare)}
             className="ms-1 inline-flex h-11 items-center gap-2 rounded-full border border-line px-3 text-sm text-ink transition-colors hover:border-accent hover:text-accent"

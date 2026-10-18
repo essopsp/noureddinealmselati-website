@@ -156,3 +156,41 @@ export function ChevronStart(props: IconProps) {
     </svg>
   );
 }
+
+export function SettingsIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 7h10M18 7h2M4 12h2M10 12h10M4 17h7M15 17h5" />
+      <circle cx="16" cy="7" r="2" />
+      <circle cx="8" cy="12" r="2" />
+      <circle cx="13" cy="17" r="2" />
+    </svg>
+  );
+}
+
+export function SunIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" />
+    </svg>
+  );
+}
+
+export function MoonIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" />
+    </svg>
+  );
+}
+
+export function MonitorIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <rect x="3" y="4.5" width="18" height="12" rx="2" />
+      <path d="M9 20h6M12 16.5V20" />
+    </svg>
+  );
+}
+

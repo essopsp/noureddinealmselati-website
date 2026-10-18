@@ -13,8 +13,10 @@
   color-scheme: light;
 }
 
+/* الوضع الداكن: يُطبَّق تلقائيًا حسب إعداد النظام (عند عدم اختيار صريح)،
+   أو صراحةً عندما يختار المستخدم "داكن". الاختيار الصريح "فاتح" يبطل إعداد النظام. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --bg: #10120b;
     --surface: #191c12;
     --ink: #ede6d6;
@@ -25,6 +27,27 @@
     --overlay: rgb(5 6 4 / 0.6);
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #10120b;
+  --surface: #191c12;
+  --ink: #ede6d6;
+  --muted: #a79e8a;
+  --accent: #cba25f;
+  --accent-soft: #8a6e3d;
+  --line: #2a2e1f;
+  --overlay: rgb(5 6 4 / 0.6);
+  color-scheme: dark;
+}
+
+/* حجم الخط: يتحكّم بمقياس rem بالكامل (واجهة ودّية لكبار السن) */
+html[data-textsize="large"] {
+  font-size: 18px;
+}
+
+html[data-textsize="xlarge"] {
+  font-size: 20px;
 }
 
 @theme inline {
@@ -38,6 +61,13 @@
   --font-display: "reem-kufi", ui-sans-serif, system-ui, sans-serif;
   --font-body: "noto-naskh-arabic", "inter", ui-sans-serif, system-ui, sans-serif;
   --font-latin: "inter", ui-sans-serif, system-ui, sans-serif;
+  --font-quran: "amiri-quran", "noto-naskh-arabic", serif;
+}
+
+/* نص المصحف: خط قرآني بتباعد أسطر واسع */
+.mushaf {
+  font-family: var(--font-quran);
+  line-height: 2.15;
 }
 
 html {
