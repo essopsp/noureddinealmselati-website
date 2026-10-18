@@ -46,12 +46,31 @@ export function AboutPageView({
         </div>
 
         <div>
-          <p className="text-muted">{dict.about.placeholder}</p>
+          {dict.about.bio.map((paragraph) => (
+            <p key={paragraph} className="mt-4 text-muted first:mt-0">
+              {paragraph}
+            </p>
+          ))}
 
           <h2 className="mt-8 font-display text-xl text-ink">
             {dict.about.contactTitle}
           </h2>
-          <p className="mt-2 text-sm text-muted">{dict.about.contactPlaceholder}</p>
+          <p className="mt-2 text-sm text-muted">{dict.about.contactText}</p>
+          <ul className="mt-4 flex flex-col gap-3">
+            {dict.about.links.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex flex-col rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:border-accent hover:text-accent"
+                >
+                  <span className="font-display text-ink">{link.label}</span>
+                  <span className="text-xs text-muted">{link.handle}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

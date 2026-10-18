@@ -72,9 +72,22 @@
   },
   "about": {
     "title": "About the Sheikh",
-    "placeholder": "A short biography will be added here soon, in shaa Allah.",
+    "placeholder": "Sheikh Nour Eddine Al-Meslati is a Libyan reciter who recites the Holy Quran in the Qaloon 'an Nafi' narration — the narration used in Libya and long established in Msallata, the city his name is attributed to.",
+    "bio": [
+      "Sheikh Nour Eddine Al-Meslati is a Quran reciter from Libya. He is attributed to the city of Msallata, known for the memorisation of the Quran and for reciting it in the Qaloon 'an Nafi' narration.",
+      "He recites the entire Quran in the Qaloon 'an Nafi' narration — the reading of Imam Qaloon from Imam Nafi' of Madinah — which is the narration adopted in Libyan mushafs and used in its mosques and Quran schools.",
+      "This khatmah includes all 114 surahs, offered here for listening and free download, retaining the original recording quality without any modification.",
+      "To follow new recitations, you can visit the Sheikh's channel on Telegram."
+    ],
     "contactTitle": "Contact",
-    "contactPlaceholder": "Social links will be added soon."
+    "contactText": "To follow new recitations and browse the complete khatmah, please visit the Sheikh's Telegram channel:",
+    "links": [
+      {
+        "label": "Telegram",
+        "href": "https://t.me/Nouraldinrecitation",
+        "handle": "The complete khatmah of Sheikh Nour Eddine Al-Meslati"
+      }
+    ]
   },
   "footer": {
     "rights": "All rights reserved",
