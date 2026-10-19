@@ -11,6 +11,7 @@ A fully static site for the complete Quran recitations — **114 surahs in the Q
 
 - **114 surahs** with instant search by name or number (diacritics- and hamza-insensitive), showing Makki/Madani, ayah count and recitation duration.
 - **Sticky audio player** at the bottom of the screen: keeps playing while navigating between pages, play/pause, previous/next, ±10s, speed 0.75×–2×, auto-advance to the next surah, **Media Session** support (lock screen and notifications), and resume of the last position from `localStorage`.
+- **The site follows the recitation**: starting a surah from the home page or the surah list opens its page automatically, and so does the auto-advance to the next surah once a recitation ends — audio keeps playing across navigations, and browsing other pages is never interrupted.
 - **Surah text in the Qaloon narration** (6,214 ayat) inlined into the static HTML — readable with JavaScript disabled and indexable by search engines.
 - **Two layouts**: “List” (one ayah per line with its number rosette) and “Mushaf” (continuous justified text with `۝` ayah separators).
 - **Two recitation effects**: “Faded” (words gradually take on full colour as they are recited) or “Reveal” (recited words appear gradually).

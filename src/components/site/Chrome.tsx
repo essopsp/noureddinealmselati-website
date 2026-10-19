@@ -28,7 +28,7 @@ export function Chrome({
       <Header />
       <main id="main">{children}</main>
       <Footer />
-      <PlayerHost />
+      <PlayerHost locale={locale} />
     </UiProvider>
   );
 }

@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import type { Locale } from "@/i18n/config";
 import { initPlayer, usePlayer } from "./store";
 import { PlayerBar } from "./PlayerBar";
+import { PlayerNavigator } from "./PlayerNavigator";
 import { ResumeToast } from "./ResumeToast";
 
-export function PlayerHost() {
+export function PlayerHost({ locale }: { locale: Locale }) {
   useEffect(() => {
     initPlayer();
 
@@ -37,6 +39,7 @@ export function PlayerHost() {
 
   return (
     <>
+      <PlayerNavigator locale={locale} />
       <ResumeToast />
       <PlayerBar />
     </>
