@@ -6,8 +6,6 @@ import { toArabicDigits } from "@/lib/format";
 import { buildFlatWords, wordIndexAt } from "@/lib/recitation";
 import type { AyahTiming, QalunAyah, SurahWordTimings } from "@/lib/types";
 
-const AYAH_MARK = "\u06DD";
-
 /** تمرير الصفحة ليبقى العنصر ظاهرًا بين الشريط العلوي وشريط المشغّل */
 function scrollToElement(el: HTMLElement | null) {
   if (!el || el.getClientRects().length === 0) return;
@@ -168,7 +166,6 @@ export function AyahText({
               className="ayah-mark"
               aria-label={`${jumpLabel} ${toArabicDigits(String(v.a))}`}
             >
-              {AYAH_MARK}
               {toArabicDigits(String(v.a))}
             </button>
           </span>

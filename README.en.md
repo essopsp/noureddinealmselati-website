@@ -15,6 +15,8 @@ A fully static site for the complete Quran recitations — **114 surahs in the Q
 - **Surah text in the Qaloon narration** (6,214 ayat) inlined into the static HTML — readable with JavaScript disabled and indexable by search engines.
 - **Two layouts**: “List” (one ayah per line with its number rosette) and “Mushaf” (continuous justified text with `۝` ayah separators).
 - **Third layout, “Mushaf (pages)”**: real KFGQPC Qaloon page numbers (604 pages, 15 lines each) in the mushaf typeface, with the juz and surah name in the page header and the page number in the footer, automatic page turns that follow the recitation, previous/next buttons, and the last page of each surah remembered (automatic playback never overwrites the reader’s place).
+- **Mushaf size in the pages layout**: the “text size” setting scales the whole page (100% / 115% / 130%) — text and lines together — without ever changing the number of lines per page (always 15); the space left for the page is measured from the real header and player bar instead of a fixed guess. On phones the page becomes wider than the screen and is panned horizontally.
+- **Ayah number rosette**: the KFGQPC typeface draws it as a single rosette carrying the number (as in the printed mushaf) in all three layouts, with no extra empty rosette.
 - **Two recitation effects**: “Faded” (words gradually take on full colour as they are recited) or “Reveal” (recited words appear gradually).
 - **Current-word tracking** at word precision, with auto-scroll that keeps the ayah above the player bar; clicking any word or ayah starts playback from that position.
 - **Display settings** persisted locally: theme (light/dark/system), text size, layout and reading effect — applied before paint, with no flash.
@@ -27,7 +29,7 @@ A fully static site for the complete Quran recitations — **114 surahs in the Q
 | Framework | Next.js 16 with `output: "export"` (static export, no server) |
 | UI | React 19 · TypeScript · Tailwind CSS 4 |
 | State | Zustand (player + display preferences) |
-| Fonts | Self-hosted: Amiri Quran (mushaf text) · KFGQPC Qaloon (pages layout) · Noto Naskh Arabic · Reem Kufi · Inter |
+| Fonts | Self-hosted: Amiri Quran (mushaf text) · KFGQPC Qaloon (pages layout + ayah rosette) · Noto Naskh Arabic · Reem Kufi · Inter |
 | Hosting | Cloudflare Pages (site) · Cloudflare R2 (audio) |
 | Deployment | GitHub Actions → `wrangler pages deploy` |
 
@@ -130,4 +132,5 @@ Every push to `main` runs `.github/workflows/deploy.yml`: `npm ci` → `npm run 
 
 - **Mushaf text:** Qaloon 'an Nafi mushaf edition — Quranpedia / KFGQPC via `iptvchecker/content-quran-json`, licensed **CC BY-SA 4.0** (attribution is shown inside the website).
 - **Fonts:** Amiri Quran · Noto Naskh Arabic · Reem Kufi · Inter — all under the SIL Open Font License, self-hosted.
+- **Mushaf typeface:** KFGQPC Qaloon 10 (WOFF2) — hosted as is, with **no modification or subsetting**, under the King Fahd Glorious Quran Printing Complex licence. It is used for the text in the “Mushaf (pages)” layout and for the ayah number rosette in all three layouts.
 - **Recitations:** all rights to the recorded recitations belong to Sheikh Nour Eddine Al-Meslati; they may not be reused without his permission.

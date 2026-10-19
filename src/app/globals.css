@@ -107,15 +107,14 @@ html:not([data-layout]) .ayah[data-active] {
   background-color: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
-/* فاصل الآية: الوردة القرآنية والخط يرسم الرقم داخلها */
+/* فاصل الآية: يرسمه خط KFGQPC وردة واحدة تحمل رقم الآية */
 .ayah-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   padding: 0;
   border: 0;
   background: none;
   color: var(--accent-soft);
+  font-family: var(--font-qaloon);
   font-size: 1.05em;
   line-height: 1;
   vertical-align: middle;
@@ -133,7 +132,7 @@ html:not([data-layout]) .ayah-mark {
   position: absolute;
   inset-inline-start: 0;
   top: 0.15rem;
-  font-size: 1.45em;
+  font-size: 2.1em;
 }
 
 
@@ -153,6 +152,10 @@ html:not([data-layout="pages"]) .pages {
 .pages {
   font-family: var(--font-qaloon);
   line-height: normal;
+  /* تكبير المصحف على الجوال: تمرير أفقي بدل قصّ الصفحة */
+  overflow-x: auto;
+  --page-scale: 1; /* تكبير الصفحة (مرتبط بإعداد حجم النص) */
+  --page-chrome: 240px; /* ارتفاع الترويسة وشريط المشغّل (يُقاس بـ JS) */
 }
 
 .pages .page {
@@ -161,7 +164,7 @@ html:not([data-layout="pages"]) .pages {
   container-type: size;
   position: relative;
   display: block;
-  width: 100%;
+  width: calc(100% * var(--page-scale));
   margin-inline: auto;
   aspect-ratio: 0.7;
   border: 1px solid var(--line);
@@ -174,8 +177,8 @@ html:not([data-layout="pages"]) .pages {
 @media (min-width: 48rem) {
   /* على الشاشات الواسعة: الصفحة بملء الارتفاع المتاح وبأبعاد الورق */
   .pages .page {
-    width: min(100%, calc((100vh - 15rem) * 0.7));
-    width: min(100%, calc((100dvh - 15rem) * 0.7));
+    width: calc((100vh - var(--page-chrome)) * 0.7 * var(--page-scale));
+    width: calc((100dvh - var(--page-chrome)) * 0.7 * var(--page-scale));
   }
 }
 
@@ -275,6 +278,17 @@ html:not([data-layout="pages"]) .pages {
 
 .pages .wx .ayah-mark {
   cursor: default;
+}
+
+/* في نمط الصفحات تستفيد الصفحة من عرض أكبر (حشو أقل للقسم) */
+html[data-layout="pages"] section:has(.pages) {
+  padding-inline: 12px;
+}
+
+@media (min-width: 48rem) {
+  html[data-layout="pages"] section:has(.pages) {
+    padding-inline: 20px;
+  }
 }
 
 .pages .page-nav {

@@ -11,7 +11,13 @@ import {
   type MouseEvent,
 } from "react";
 import { usePlayer } from "@/components/player/store";
-import { formatNumber } from "@/lib/format";
+import { formatNumber, toArabicDigits } from "@/lib/format";
+import {
+  getServerTextSize,
+  getTextSizeSnapshot,
+  subscribeDisplay,
+  type TextSize,
+} from "@/lib/display";
 import {
   getServerPage,
   readPageSnapshot,
@@ -27,12 +33,20 @@ import type {
   SurahWordTimings,
 } from "@/lib/types";
 
-const AYAH_MARK = "\u06DD";
-
 /** البسملة بترتيب رواية قالون (من نص المصحف نفسه) */
 const BASMALA = "بِسْمِ اِ۬للَّهِ اِ۬لرَّحْمَٰنِ اِ۬لرَّحِيمِ";
 
 const FONT_FAMILY = '"kfgqpc-qaloon"';
+
+/**
+ * معامل تكبير الصفحة في نمط «صفحات» بحسب إعداد حجم النص: الخط داخل الصفحة
+ * مشتق من عرضها (cqw)، فتكبير الصفحة يكبّر النص كله ويبقى عدد الأسطر ١٥.
+ */
+const PAGE_SCALE: Record<TextSize, number> = {
+  base: 1,
+  large: 1.15,
+  xlarge: 1.3,
+};
 
 /**
  * قياس كل صفحة يصلح لكل المقاسات (الصفحة وحدها تقاس بوحدات حاوية) — يُخزَّن مؤقتًا.
@@ -170,6 +184,14 @@ export function MushafPages({
     [pages, saved]
   );
 
+  /** إعداد «حجم النص» يحدّد تكبير الصفحة في نمط «صفحات» */
+  const textSize = useSyncExternalStore(
+    subscribeDisplay,
+    getTextSizeSnapshot,
+    getServerTextSize
+  );
+  const scale = PAGE_SCALE[textSize];
+
   const [manual, setManual] = useState<number | null>(null);
   const [auto, setAuto] = useState(0);
 
@@ -187,6 +209,31 @@ export function MushafPages({
     if (!root) return;
     wordEls.current = Array.from(root.querySelectorAll<HTMLElement>(".w"));
   }, [surah, pages]);
+
+  // قياس ارتفاع الترويسة وشريط المشغّل: المساحة المتاحة للصفحة بدل تقدير ثابت
+  useEffect(() => {
+    const root = containerRef.current;
+    if (!root) return;
+    const measure = () => {
+      const header = document.querySelector<HTMLElement>("[data-site-header]");
+      const bar = document.querySelector<HTMLElement>("[data-player-bar]");
+      const chrome =
+        (header?.getBoundingClientRect().height ?? 0) +
+        (bar?.getBoundingClientRect().height ?? 0);
+      root.style.setProperty("--page-chrome", `${Math.round(chrome)}px`);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    const header = document.querySelector("[data-site-header]");
+    const bar = document.querySelector("[data-player-bar]");
+    if (header) observer.observe(header);
+    if (bar) observer.observe(bar);
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 
   // حفظ آخر صفحة اختارها القارئ لكل سورة (لا نكتب فوقها أثناء التقليب التلقائي)
   const lastSaved = useRef<number | null>(null);
@@ -323,8 +370,7 @@ export function MushafPages({
             <span key={k}>{k < item.w.length - 1 ? `${w} ` : w}</span>
           ))}
           <span className="ayah-mark wx-mark" aria-hidden="true">
-            {AYAH_MARK}
-            {formatNumber(item.a, locale)}
+            {toArabicDigits(item.a)}
           </span>
         </span>
       );
@@ -345,8 +391,7 @@ export function MushafPages({
             className="ayah-mark"
             aria-label={`${labels.jump} ${formatNumber(ayat[item.i].a, locale)}`}
           >
-            {AYAH_MARK}
-            {formatNumber(ayat[item.i].a, locale)}
+            {toArabicDigits(ayat[item.i].a)}
           </button>
         )}
       </span>
@@ -361,6 +406,7 @@ export function MushafPages({
       className="mushaf mushaf-text pages mt-4"
       dir="rtl"
       lang="ar"
+      style={{ "--page-scale": scale } as CSSProperties}
     >
       {pages.pages.map((p, pi) => (
         <article
