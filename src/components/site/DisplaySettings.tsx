@@ -114,7 +114,7 @@ export function DisplaySettings() {
         aria-expanded={open}
         aria-label={dict.display.title}
         title={dict.display.title}
-        className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-accent hover:text-accent sm:h-11 sm:w-11"
       >
         <SettingsIcon width={20} height={20} />
       </button>

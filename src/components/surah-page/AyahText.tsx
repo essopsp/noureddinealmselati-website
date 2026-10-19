@@ -35,14 +35,16 @@ function wordIndexAt(flat: FlatWord[], time: number): number {
   return found;
 }
 
-/** تمرير الصفحة ليبقى العنصر ظاهرًا فوق شريط المشغّل */
+/** تمرير الصفحة ليبقى العنصر ظاهرًا بين الشريط العلوي وشريط المشغّل */
 function scrollToElement(el: HTMLElement | null) {
   if (!el || el.getClientRects().length === 0) return;
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const headerInset = header ? Math.max(0, header.getBoundingClientRect().bottom) : 0;
   const bar = document.querySelector<HTMLElement>("[data-player-bar]");
   const bottomInset = bar
     ? Math.max(0, window.innerHeight - bar.getBoundingClientRect().top)
     : 0;
-  const top = 12;
+  const top = headerInset + 12;
   const bottom = window.innerHeight - bottomInset - 12;
   const rect = el.getBoundingClientRect();
   if (rect.top >= top && rect.bottom <= bottom) return;

@@ -180,6 +180,8 @@ html[data-effect="reveal"] .w {
 
 html {
   scroll-behavior: smooth;
+  /* حتى لا يختفي المحتوى المرتبط به تحت الشريط العلوي الثابت */
+  scroll-padding-top: 5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
