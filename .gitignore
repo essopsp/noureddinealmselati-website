@@ -23,3 +23,7 @@ tsconfig.tsbuildinfo
 
 # Cloudflare API token — never commit
 .cf_token
+
+# Python
+__pycache__/
+*.pyc

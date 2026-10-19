@@ -25,6 +25,8 @@ interface PlayerState {
   resume: { surah: number; time: number } | null;
 
   play: (surah: number) => void;
+  /** يشغّل السورة من موضع محدد بالثواني (للالتقاط من نص المصحف) */
+  playAt: (surah: number, time: number) => void;
   toggle: () => void;
   next: () => void;
   previous: () => void;
@@ -119,6 +121,42 @@ export const usePlayer = create<PlayerState>((set, get) => ({
       .then(() => {
         set({ blocked: false, resume: null });
         saveSession({ surah });
+      })
+      .catch(() => {
+        set({ blocked: true, playing: false });
+      });
+  },
+
+  playAt: (surah, at) => {
+    const rec = getRecitation(surah);
+    if (!rec) return;
+    const el = getAudio();
+    const isSame = get().current === surah;
+    const src = audioUrl(rec.file);
+    const apply = () => {
+      el.currentTime = Math.max(0, at);
+      set({ time: el.currentTime });
+    };
+    if (!isSame || el.src !== new URL(src, window.location.href).href) {
+      el.src = src;
+      set({
+        current: surah,
+        time: at,
+        duration: rec.duration || 0,
+        errored: false,
+        loading: true,
+      });
+      el.addEventListener("loadedmetadata", apply, { once: true });
+    } else if (el.readyState >= 1) {
+      apply();
+    } else {
+      el.addEventListener("loadedmetadata", apply, { once: true });
+    }
+    el.playbackRate = get().rate;
+    el.play()
+      .then(() => {
+        set({ blocked: false, resume: null });
+        saveSession({ surah, time: at });
       })
       .catch(() => {
         set({ blocked: true, playing: false });

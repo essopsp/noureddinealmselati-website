@@ -105,7 +105,8 @@
     "toggle": "Show text",
     "note": "Mushaf text in the Qaloon 'an Nafi' narration (Arabic).",
     "attributionPrefix": "Text: Qaloon mushaf edition — Quranpedia / KFGQPC, licensed CC BY-SA 4.0.",
-    "source": "Source"
+    "source": "Source",
+    "jump": "Jump to ayah"
   },
   "footer": {
     "rights": "All rights reserved",

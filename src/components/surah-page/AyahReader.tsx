@@ -2,27 +2,42 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
-import type { QalunSurah } from "@/lib/types";
-import { toArabicDigits } from "@/lib/format";
+import type { AyahTiming, QalunSurah } from "@/lib/types";
 import { ChevronStart } from "@/components/ui/icons";
+import { AyahList } from "./AyahList";
 
 const SOURCE_URL = "https://github.com/iptvchecker/content-quran-json";
 
-function loadQalun(number: number): QalunSurah | null {
+function loadJson<T>(...parts: string[]): T | null {
   try {
-    const file = path.join(
-      process.cwd(),
-      "src",
-      "data",
-      "quran",
-      "qalun",
-      `${String(number).padStart(3, "0")}.json`
-    );
+    const file = path.join(process.cwd(), ...parts);
     if (!fs.existsSync(file)) return null;
-    return JSON.parse(fs.readFileSync(file, "utf8")) as QalunSurah;
+    return JSON.parse(fs.readFileSync(file, "utf8")) as T;
   } catch {
     return null;
   }
+}
+
+function loadQalun(number: number): QalunSurah | null {
+  return loadJson<QalunSurah>(
+    "src",
+    "data",
+    "quran",
+    "qalun",
+    `${String(number).padStart(3, "0")}.json`
+  );
+}
+
+function loadTimings(number: number): AyahTiming[] {
+  return (
+    loadJson<AyahTiming[]>(
+      "src",
+      "data",
+      "quran",
+      "timings",
+      `${String(number).padStart(3, "0")}.json`
+    ) ?? []
+  );
 }
 
 /**
@@ -40,8 +55,7 @@ export function AyahReader({
   const data = loadQalun(surah);
   if (!data || data.ayat.length === 0) return null;
 
-  return (
-    <section
+  return (    <section
       aria-labelledby="surah-text-heading"
       className="mt-6 rounded-2xl border border-line bg-surface px-5 py-6 sm:px-6"
     >
@@ -64,16 +78,12 @@ export function AyahReader({
           <p className="mt-2 text-xs text-muted">{dict.reader.note}</p>
         )}
 
-        <ol className="mushaf mt-4 list-none space-y-4" dir="rtl" lang="ar">
-          {data.ayat.map((v) => (
-            <li key={v.a} className="flex gap-3">
-              <span className="mt-1 flex h-7 min-w-7 shrink-0 items-center justify-center rounded-full border border-accent/40 px-1 text-xs tabular-nums text-accent">
-                {toArabicDigits(String(v.a))}
-              </span>
-              <p className="text-[1.35rem] text-ink">{v.t}</p>
-            </li>
-          ))}
-        </ol>
+        <AyahList
+          ayat={data.ayat}
+          timings={loadTimings(surah)}
+          surah={surah}
+          jumpLabel={dict.reader.jump}
+        />
       </details>
 
       <p className="mt-5 border-t border-line pt-3 text-xs leading-6 text-muted">

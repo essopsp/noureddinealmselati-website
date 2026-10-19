@@ -29,3 +29,13 @@ export interface QalunSurah {
   number: number;
   ayat: QalunAyah[];
 }
+
+/** توقيت آية داخل تسجيل السورة (ثوانٍ من بداية الملف) */
+export interface AyahTiming {
+  /** رقم الآية في ترقيم رواية قالون */
+  a: number;
+  start: number;
+  end: number;
+  /** ثقة المطابقة الصوتية (0..1) — للمراجعة فقط */
+  score: number;
+}
