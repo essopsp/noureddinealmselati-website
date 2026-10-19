@@ -1,6 +1,6 @@
 export type Theme = "light" | "dark" | "system";
 export type TextSize = "base" | "large" | "xlarge";
-export type LayoutMode = "list" | "mushaf";
+export type LayoutMode = "list" | "mushaf" | "pages";
 export type EffectMode = "fade" | "reveal";
 
 export const THEME_KEY = "mselati:theme";
@@ -10,7 +10,7 @@ export const EFFECT_KEY = "mselati:effect";
 
 export const THEMES: Theme[] = ["light", "dark", "system"];
 export const TEXT_SIZES: TextSize[] = ["base", "large", "xlarge"];
-export const LAYOUTS: LayoutMode[] = ["list", "mushaf"];
+export const LAYOUTS: LayoutMode[] = ["list", "mushaf", "pages"];
 export const EFFECTS: EffectMode[] = ["fade", "reveal"];
 
 export function readTheme(): Theme {
@@ -38,9 +38,8 @@ export function readTextSize(): TextSize {
 export function readLayout(): LayoutMode {
   if (typeof window === "undefined") return "list";
   try {
-    return window.localStorage.getItem(LAYOUT_KEY) === "mushaf"
-      ? "mushaf"
-      : "list";
+    const value = window.localStorage.getItem(LAYOUT_KEY);
+    return value === "mushaf" || value === "pages" ? value : "list";
   } catch {
     return "list";
   }
@@ -67,10 +66,10 @@ export function applyTextSize(size: TextSize, root: HTMLElement): void {
   else root.setAttribute("data-textsize", size);
 }
 
-/** النمط الافتراضي (قائمة/تأثير باهت) = غياب السمة */
+/** النمط الافتراضي (قائمة) = غياب السمة */
 export function applyLayout(mode: LayoutMode, root: HTMLElement): void {
-  if (mode === "mushaf") root.setAttribute("data-layout", "mushaf");
-  else root.removeAttribute("data-layout");
+  if (mode === "list") root.removeAttribute("data-layout");
+  else root.setAttribute("data-layout", mode);
 }
 
 export function applyEffect(mode: EffectMode, root: HTMLElement): void {
@@ -114,7 +113,7 @@ export function saveEffect(mode: EffectMode): void {
  * سكربت صغير يُنفَّذ قبل الرسم لتطبيق المظهر وحجم الخط والنمط المحفوظين
  * (يمنع وميض الشاشة عند تحميل الصفحة).
  */
-export const DISPLAY_INIT_SCRIPT = `(function(){try{var r=document.documentElement;var t=localStorage.getItem('${THEME_KEY}');if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);}var s=localStorage.getItem('${TEXTSIZE_KEY}');if(s==='large'||s==='xlarge'){r.setAttribute('data-textsize',s);}if(localStorage.getItem('${LAYOUT_KEY}')==='mushaf'){r.setAttribute('data-layout','mushaf');}if(localStorage.getItem('${EFFECT_KEY}')==='reveal'){r.setAttribute('data-effect','reveal');}}catch(e){}})();`;
+export const DISPLAY_INIT_SCRIPT = `(function(){try{var r=document.documentElement;var t=localStorage.getItem('${THEME_KEY}');if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);}var s=localStorage.getItem('${TEXTSIZE_KEY}');if(s==='large'||s==='xlarge'){r.setAttribute('data-textsize',s);}var l=localStorage.getItem('${LAYOUT_KEY}');if(l==='mushaf'||l==='pages'){r.setAttribute('data-layout',l);}if(localStorage.getItem('${EFFECT_KEY}')==='reveal'){r.setAttribute('data-effect','reveal');}}catch(e){}})();`;
 
 /* ------------------------------------------------------------------ *
  * مخزن خارجي بسيط (localStorage + سمات <html>) لقراءة تفضيلات العرض عبر

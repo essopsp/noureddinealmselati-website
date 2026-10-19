@@ -45,3 +45,64 @@ export type AyahWordTimings = [number, number][];
 
 /** توقيتات كلمات سورة: عنصر لكل آية بترتيب المصحف */
 export type SurahWordTimings = AyahWordTimings[];
+
+/** عنصر داخل صفحة مصحف: آية كاملة أو جزء منها */
+export interface PageAyahItem {
+  k: "a";
+  /** فهرس الآية في السورة (0-based) */
+  i: number;
+  /** أول كلمة معروضة من الآية (تُهمَل = 0) */
+  f?: number;
+  /** آخر كلمة معروضة (غير شاملة، تُهمَل = نهاية الآية) */
+  t?: number;
+}
+
+/** عنصر داخل صفحة مصحف: نص من سورة مجاورة على الصفحة المشتركة */
+export interface PageForeignItem {
+  k: "x";
+  /** رقم السورة المجاورة */
+  n: number;
+  /** فهرس الآية فيها */
+  i: number;
+  /** رقم الآية فيها */
+  a: number;
+  f: number;
+  t: number;
+  /** رقم الجزء */
+  j: number;
+  /** بداية الآية بالثواني */
+  s: number;
+  /** كلمات الجزء المعروض */
+  w: string[];
+}
+
+/** رأس سورة داخل الصفحة */
+export interface PageSurahItem {
+  k: "s";
+  n: number;
+}
+
+/** سطر البسملة داخل الصفحة */
+export interface PageBasmalaItem {
+  k: "b";
+}
+
+export type PageItem = PageAyahItem | PageForeignItem | PageSurahItem | PageBasmalaItem;
+
+export interface MushafPage {
+  /** رقم الصفحة في المصحف (1..604) */
+  p: number;
+  /** رقم الجزء */
+  j: number;
+  items: PageItem[];
+}
+
+/** صفحات سورة واحدة في مصحف رواية قالون (من KFGQPC) */
+export interface SurahPages {
+  surah: number;
+  bookPages: number;
+  linesPerPage: number;
+  from: number;
+  to: number;
+  pages: MushafPage[];
+}

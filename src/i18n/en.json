@@ -104,7 +104,8 @@
     "layoutMushaf": "Mushaf",
     "effect": "Reading effect",
     "effectFade": "Faded",
-    "effectReveal": "Reveal"
+    "effectReveal": "Reveal",
+    "layoutPages": "Mushaf (pages)"
   },
   "reader": {
     "title": "Surah text",
@@ -112,7 +113,14 @@
     "note": "Mushaf text in the Qaloon 'an Nafi' narration (Arabic).",
     "attributionPrefix": "Text: Qaloon mushaf edition — Quranpedia / KFGQPC, licensed CC BY-SA 4.0.",
     "source": "Source",
-    "jump": "Jump to ayah"
+    "jump": "Jump to ayah",
+    "page": "Page",
+    "of": "of",
+    "juz": "Juz",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "pagesAttributionPrefix": "Mushaf pages and typeface: Qaloon mushaf — King Fahd Glorious Quran Printing Complex (KFGQPC), v10.",
+    "pagesSource": "Source"
   },
   "footer": {
     "rights": "All rights reserved",

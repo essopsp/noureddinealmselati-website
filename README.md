@@ -14,6 +14,7 @@
 - **الموقع يتبع التلاوة**: عند تشغيل سورة من الرئيسية أو من قائمة السور تُفتح صفحتها تلقائيًا، وكذلك عند الانتقال إلى السورة التالية بعد انتهاء التلاوة — مع بقاء الصوت يعمل أثناء التنقل، وعدم مقاطعة تصفّح بقية الصفحات.
 - **نص السورة برواية قالون** (٦٢١٤ آية) مضمَّن في HTML الثابت — يظهر بلا جافاسكربت، ومفهرس لمحركات البحث.
 - **نمطان للعرض**: «قائمة» (آية في كل سطر مع وردة الرقم) و«مصحف» (نص متصل مضبوط `justify` مع فواصل الآيات `۝`).
+- **نمط ثالث «مصحف (صفحات)»**: صفحات مصحف قالون بترقيم KFGQPC الحقيقي (٦٠٤ صفحة، ١٥ سطرًا في الصفحة) بخط المصحف، مع رقم الجزء واسم السورة في رأس الصفحة ورقم الصفحة في تذييلها، وتقليب تلقائي تتبعًا للتلاوة، وأزرار «السابقة/التالية»، وحفظ آخر صفحة لكل سورة (ولا يطمس التشغيل التلقائي موضع القارئ).
 - **تأثيران للقراءة**: «لون باهت» يتلوّن تدريجيًا مع التلاوة، أو «ظهور تدريجي» للكلمات المقروءة.
 - **تتبّع الكلمة الجارية** بدقة الكلمة + تمرير تلقائي يبقي الآية فوق شريط المشغّل، والنقر على أي كلمة أو آية يبدأ التشغيل من موضعها.
 - **إعدادات عرض** محفوظة: المظهر (فاتح/داكن/النظام)، حجم الخط، نمط العرض، وتأثير القراءة — تُطبَّق قبل الرسم بلا وميض.
@@ -26,7 +27,7 @@
 | الإطار | Next.js ‎16 مع `output: "export"` (تصدير ثابت، بلا خادم) |
 | الواجهة | React 19 · TypeScript · Tailwind CSS 4 |
 | الحالة | Zustand ‎(المشغّل + تفضيلات العرض) |
-| الخطوط | مستضافة محليًا: Amiri Quran (نص المصحف) · Noto Naskh Arabic · Reem Kufi · Inter |
+| الخطوط | مستضافة محليًا: Amiri Quran (نص المصحف) · KFGQPC Qaloon (نمط الصفحات) · Noto Naskh Arabic · Reem Kufi · Inter |
 | الاستضافة | Cloudflare Pages (الموقع) · Cloudflare R2 (الصوت) |
 | النشر | GitHub Actions → `wrangler pages deploy` |
 
@@ -62,11 +63,11 @@ src/
   components/
     player/store.ts     منطق المشغّل (Zustand + HTMLAudioElement + Media Session)
     site/               الهيدر، الفوتر، إعدادات العرض، UiProvider (اللغة والقواميس)
-    surah-page/         AyahReader (خادمي) + AyahText (تتبّع الكلمات)
+    surah-page/         AyahReader (خادمي) + SurahText (تبديل النمط) + AyahText (تتبّع الكلمات) + MushafPages (صفحات المصحف)
     surahs/             قائمة السور والبحث
   data/                 surahs.json · recitations.json · quran/…
   i18n/                 ar.json · en.json · config.ts · dictionaries.ts
-  lib/                  data · display · format · search · seo · types
+  lib/                  data · display · format · recitation · reading-page · search · seo · types
 scripts/                سكربتات بناء البيانات (تُشغَّل يدويًا عند التحديث)
 tools/kaggle-timing/    خط أنابيب استخراج التوقيتات (Kaggle GPU)
 public/fonts/           الخطوط المستضافة محليًا
@@ -81,13 +82,18 @@ public/fonts/           الخطوط المستضافة محليًا
 | `src/data/quran/qalun/NNN.json` | نص المصحف برواية قالون: `{a, hafs[], t}` لكل آية | ١٫٨ MB |
 | `src/data/quran/timings/NNN.json` | توقيت كل آية: `{a, start, end, score}` | ٦٣٦ KB |
 | `src/data/quran/timings/words-NNN.json` | توقيت كل كلمة `[[start,end],…]` بترتيب النص | ١٫٢ MB |
+| `src/data/quran/layout/NNN.json` | بنية صفحات مصحف قالون: `{surah, bookPages, linesPerPage, from, to, pages[{p, j, items[]}]}` | ٥٦٤ KB |
+| `src/data/quran/layout/source.json` | وصف المصدر وبصمة SHA-256 لملف KFGQPC المُحمَّل | صغير |
 
 ### تحديث البيانات
 
 ```bash
 node scripts/build-surahs.mjs        # يبني surahs.json (جدول أسماء مرجعي ثابت)
 node scripts/build-quran-text.mjs    # ينزّل نص قالون ويتحقق من بصمة SHA-256 ثم يكتب quran/qalun/
+node scripts/build-qaloon-layout.mjs # ينزّل تخطيط صفحات KFGQPC ويتحقق من بصمته ثم يكتب quran/layout/
 ```
+
+تخطيط الصفحات من ملف **KFGQPC Qaloon v10** (`quran-data-kfgqpc`) — يُثبَّت ببصمة SHA-256 داخل السكربت، ويتحقق البناء من أن كل سورة تُعاد تركيبها من كلماتها بلا نقص أو زيادة قبل الكتابة. عناصر كل صفحة: آية كاملة `{k:"a",i}` أو جزء آية يعبر بين صفحتين `{f,t}`، أو نص سورة مجاورة للسياق `{k:"x"}` (غير قابل للنقر)، أو رأس سورة `{k:"s"}` أو بسملة `{k:"b"}`.
 
 نص المصحف من [iptvchecker/content-quran-json](https://github.com/iptvchecker/content-quran-json) (طبعة Quranpedia / KFGQPC) — **٦٢١٤ آية** برواية قالون مقابل ٦٢٣٦ في حفص، والاختلاف في ٥٠ سورة. لا يُستخدم `uthmani_qaloon` من quran.com لأنه بترقيم حفص.
 
@@ -128,5 +134,7 @@ python3 tools/kaggle-timing/emit_word_timings.py /tmp/kaggle-out
 ## الإسناد والتراخيص
 
 - **نص المصحف:** مصحف رواية قالون عن نافع — Quranpedia / KFGQPC عبر `iptvchecker/content-quran-json`، برخصة **CC BY-SA 4.0** (يُذكر الإسناد داخل الموقع).
+- **تخطيط الصفحات:** بيانات صفحات KFGQPC Qaloon v10 من [thetruetruth/quran-data-kfgqpc](https://github.com/thetruetruth/quran-data-kfgqpc) — أرقام الصفحات وحدودها وأرقام الأجزاء مطابقة للمصحف المطبوع. **حدّ الدقة:** قد يختلف موضع كسر السطر داخل الصفحة بكلمة أو كلمتين، لأن بيانات كسر الأسطر التفصيلية متاحة لترقيم حفص فقط.
+- **خط المصحف:** KFGQPC Qaloon 10 (بتنسيق WOFF2) — مستضاف كما هو **بلا أي تعديل أو تجزيء** وفق رخصة مجمع الملك فهد لطباعة المصحف الشريف، ويُستخدم في نمط «مصحف (صفحات)» فقط. يحتاج هذا النمط متصفحًا يدعم وحدات الحاوية (`cqw/cqh`) — أي Firefox ‎١١٠+ وSafari ‎١٦+؛ وفي غيرها يظهر النص بحجم احتياطي مقروء بلا تقسيم ١٥ سطرًا.
 - **الخطوط:** Amiri Quran · Noto Naskh Arabic · Reem Kufi · Inter — جميعها برخصة SIL Open Font License، ومستضافة محليًا.
 - **التلاوات:** حقوق تسجيل التلاوات محفوظة للشيخ نور الدين المسلاتي؛ لا يجوز إعادة استخدامها بغير إذنه.

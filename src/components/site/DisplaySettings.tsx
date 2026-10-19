@@ -92,6 +92,7 @@ export function DisplaySettings() {
   const layoutLabels: Record<LayoutMode, string> = {
     list: dict.display.layoutList,
     mushaf: dict.display.layoutMushaf,
+    pages: dict.display.layoutPages,
   };
   const effectLabels: Record<EffectMode, string> = {
     fade: dict.display.effectFade,
@@ -178,7 +179,7 @@ export function DisplaySettings() {
           <div
             role="radiogroup"
             aria-label={dict.display.layout}
-            className="mt-2 grid grid-cols-2 gap-1.5"
+            className="mt-2 grid grid-cols-3 gap-1.5"
           >
             {LAYOUTS.map((value) => (
               <button

@@ -104,7 +104,8 @@
     "layoutMushaf": "مصحف",
     "effect": "تأثير القراءة",
     "effectFade": "لون باهت",
-    "effectReveal": "ظهور تدريجي"
+    "effectReveal": "ظهور تدريجي",
+    "layoutPages": "مصحف (صفحات)"
   },
   "reader": {
     "title": "نص السورة",
@@ -112,7 +113,14 @@
     "note": "نص المصحف برواية قالون عن نافع (بالعربية).",
     "attributionPrefix": "النص: مصحف رواية قالون — Quranpedia / KFGQPC، برخصة CC BY-SA 4.0.",
     "source": "المصدر",
-    "jump": "الانتقال إلى الآية"
+    "jump": "الانتقال إلى الآية",
+    "page": "صفحة",
+    "of": "من",
+    "juz": "الجزء",
+    "prevPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية",
+    "pagesAttributionPrefix": "صفحات المصحف وخطها: مصحف رواية قالون — مجمع الملك فهد لطباعة المصحف الشريف (KFGQPC)، v١٠.",
+    "pagesSource": "المصدر"
   },
   "footer": {
     "rights": "جميع الحقوق محفوظة",

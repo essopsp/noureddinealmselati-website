@@ -14,6 +14,7 @@ A fully static site for the complete Quran recitations — **114 surahs in the Q
 - **The site follows the recitation**: starting a surah from the home page or the surah list opens its page automatically, and so does the auto-advance to the next surah once a recitation ends — audio keeps playing across navigations, and browsing other pages is never interrupted.
 - **Surah text in the Qaloon narration** (6,214 ayat) inlined into the static HTML — readable with JavaScript disabled and indexable by search engines.
 - **Two layouts**: “List” (one ayah per line with its number rosette) and “Mushaf” (continuous justified text with `۝` ayah separators).
+- **Third layout, “Mushaf (pages)”**: real KFGQPC Qaloon page numbers (604 pages, 15 lines each) in the mushaf typeface, with the juz and surah name in the page header and the page number in the footer, automatic page turns that follow the recitation, previous/next buttons, and the last page of each surah remembered (automatic playback never overwrites the reader’s place).
 - **Two recitation effects**: “Faded” (words gradually take on full colour as they are recited) or “Reveal” (recited words appear gradually).
 - **Current-word tracking** at word precision, with auto-scroll that keeps the ayah above the player bar; clicking any word or ayah starts playback from that position.
 - **Display settings** persisted locally: theme (light/dark/system), text size, layout and reading effect — applied before paint, with no flash.
@@ -26,7 +27,7 @@ A fully static site for the complete Quran recitations — **114 surahs in the Q
 | Framework | Next.js 16 with `output: "export"` (static export, no server) |
 | UI | React 19 · TypeScript · Tailwind CSS 4 |
 | State | Zustand (player + display preferences) |
-| Fonts | Self-hosted: Amiri Quran (mushaf text) · Noto Naskh Arabic · Reem Kufi · Inter |
+| Fonts | Self-hosted: Amiri Quran (mushaf text) · KFGQPC Qaloon (pages layout) · Noto Naskh Arabic · Reem Kufi · Inter |
 | Hosting | Cloudflare Pages (site) · Cloudflare R2 (audio) |
 | Deployment | GitHub Actions → `wrangler pages deploy` |
 
@@ -62,11 +63,11 @@ src/
   components/
     player/store.ts     Player logic (Zustand + HTMLAudioElement + Media Session)
     site/               Header, footer, display settings, UiProvider (locale + dictionaries)
-    surah-page/         AyahReader (server) + AyahText (word tracking)
+    surah-page/         AyahReader (server) + SurahText (layout switch) + AyahText (word tracking) + MushafPages (mushaf pages)
     surahs/             Surah list and search
   data/                 surahs.json · recitations.json · quran/…
   i18n/                 ar.json · en.json · config.ts · dictionaries.ts
-  lib/                  data · display · format · search · seo · types
+  lib/                  data · display · format · recitation · reading-page · search · seo · types
 scripts/                Data build scripts (run manually when refreshing data)
 tools/kaggle-timing/    Timing extraction pipeline (Kaggle GPU)
 public/fonts/           Self-hosted fonts

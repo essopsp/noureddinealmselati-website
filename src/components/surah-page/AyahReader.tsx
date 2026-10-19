@@ -2,11 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
-import type { AyahTiming, QalunSurah, SurahWordTimings } from "@/lib/types";
+import type {
+  AyahTiming,
+  QalunSurah,
+  Surah,
+  SurahPages,
+  SurahWordTimings,
+} from "@/lib/types";
 import { ChevronStart } from "@/components/ui/icons";
-import { AyahText } from "./AyahText";
+import { SurahText } from "./SurahText";
 
 const SOURCE_URL = "https://github.com/iptvchecker/content-quran-json";
+const FONT_URL = "https://qurancomplex.gov.sa";
 
 function loadJson<T>(...parts: string[]): T | null {
   try {
@@ -52,6 +59,22 @@ function loadWords(number: number): SurahWordTimings {
   );
 }
 
+function loadPages(number: number): SurahPages | null {
+  return loadJson<SurahPages>(
+    "src",
+    "data",
+    "quran",
+    "layout",
+    `${String(number).padStart(3, "0")}.json`
+  );
+}
+
+function loadSurahs(): Surah[] {
+  return (
+    loadJson<Surah[]>("src", "data", "surahs.json") ?? []
+  );
+}
+
 /**
  * نص السورة برواية قالون عن نافع مضمَّن في HTML الثابت (فهرسة + يعمل بلا JS).
  */
@@ -66,6 +89,18 @@ export function AyahReader({
 }) {
   const data = loadQalun(surah);
   if (!data || data.ayat.length === 0) return null;
+
+  const pages = loadPages(surah);
+  const surahs = loadSurahs();
+  const names: Record<number, string> = {};
+  for (const page of pages?.pages ?? []) {
+    for (const item of page.items) {
+      if (item.k === "s") {
+        names[item.n] = surahs[item.n - 1]?.nameAr ?? "";
+      }
+    }
+  }
+  names[surah] = surahs[surah - 1]?.nameAr ?? "";
 
   return (    <section
       aria-labelledby="surah-text-heading"
@@ -90,12 +125,22 @@ export function AyahReader({
           <p className="mt-2 text-xs text-muted">{dict.reader.note}</p>
         )}
 
-        <AyahText
+        <SurahText
           ayat={data.ayat}
           timings={loadTimings(surah)}
           words={loadWords(surah)}
+          pages={pages}
           surah={surah}
-          jumpLabel={dict.reader.jump}
+          names={names}
+          locale={locale}
+          labels={{
+            jump: dict.reader.jump,
+            page: dict.reader.page,
+            of: dict.reader.of,
+            juz: dict.reader.juz,
+            prev: dict.reader.prevPage,
+            next: dict.reader.nextPage,
+          }}
         />
       </details>
 
@@ -108,6 +153,16 @@ export function AyahReader({
           className="text-accent hover:underline"
         >
           {dict.reader.source}
+        </a>
+        {" — "}
+        {dict.reader.pagesAttributionPrefix}{" "}
+        <a
+          href={FONT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-accent hover:underline"
+        >
+          {dict.reader.pagesSource}
         </a>
       </p>
     </section>
