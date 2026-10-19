@@ -39,3 +39,9 @@ export interface AyahTiming {
   /** ثقة المطابقة الصوتية (0..1) — للمراجعة فقط */
   score: number;
 }
+
+/** توقيتات كلمات آية واحدة: [بداية، نهاية] لكل كلمة بترتيب النص */
+export type AyahWordTimings = [number, number][];
+
+/** توقيتات كلمات سورة: عنصر لكل آية بترتيب المصحف */
+export type SurahWordTimings = AyahWordTimings[];

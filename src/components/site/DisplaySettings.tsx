@@ -11,14 +11,24 @@ import {
 import { useUi } from "./UiProvider";
 import { MonitorIcon, MoonIcon, SettingsIcon, SunIcon } from "@/components/ui/icons";
 import {
+  EFFECTS,
+  LAYOUTS,
   TEXT_SIZES,
+  changeEffect,
+  changeLayout,
   changeTextSize,
   changeTheme,
+  getEffectSnapshot,
+  getLayoutSnapshot,
+  getServerEffect,
+  getServerLayout,
   getServerTextSize,
   getServerTheme,
   getTextSizeSnapshot,
   getThemeSnapshot,
   subscribeDisplay,
+  type EffectMode,
+  type LayoutMode,
   type TextSize,
   type Theme,
 } from "@/lib/display";
@@ -37,6 +47,16 @@ export function DisplaySettings() {
     subscribeDisplay,
     getTextSizeSnapshot,
     getServerTextSize
+  );
+  const layout = useSyncExternalStore(
+    subscribeDisplay,
+    getLayoutSnapshot,
+    getServerLayout
+  );
+  const effect = useSyncExternalStore(
+    subscribeDisplay,
+    getEffectSnapshot,
+    getServerEffect
   );
   const ref = useRef<HTMLDivElement>(null);
 
@@ -68,6 +88,15 @@ export function DisplaySettings() {
     xlarge: dict.display.sizeXLarge,
   };
   const sizeGlyphPx: Record<TextSize, number> = { base: 15, large: 19, xlarge: 23 };
+
+  const layoutLabels: Record<LayoutMode, string> = {
+    list: dict.display.layoutList,
+    mushaf: dict.display.layoutMushaf,
+  };
+  const effectLabels: Record<EffectMode, string> = {
+    fade: dict.display.effectFade,
+    reveal: dict.display.effectReveal,
+  };
 
   const optionClass = (active: boolean) =>
     `flex flex-col items-center gap-1 rounded-lg border px-1 py-2 text-xs transition-colors ${
@@ -139,6 +168,50 @@ export function DisplaySettings() {
                   ع
                 </span>
                 <span>{sizeLabels[value]}</span>
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-4 font-display text-sm text-ink">
+            {dict.display.layout}
+          </p>
+          <div
+            role="radiogroup"
+            aria-label={dict.display.layout}
+            className="mt-2 grid grid-cols-2 gap-1.5"
+          >
+            {LAYOUTS.map((value) => (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={layout === value}
+                onClick={() => changeLayout(value)}
+                className={optionClass(layout === value)}
+              >
+                <span>{layoutLabels[value]}</span>
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-4 font-display text-sm text-ink">
+            {dict.display.effect}
+          </p>
+          <div
+            role="radiogroup"
+            aria-label={dict.display.effect}
+            className="mt-2 grid grid-cols-2 gap-1.5"
+          >
+            {EFFECTS.map((value) => (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={effect === value}
+                onClick={() => changeEffect(value)}
+                className={optionClass(effect === value)}
+              >
+                <span>{effectLabels[value]}</span>
               </button>
             ))}
           </div>

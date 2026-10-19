@@ -8,6 +8,9 @@ For each requested surah it:
      global (Needleman-Wunsch) alignment,
   4. writes timings-NNN.json + qc-NNN.md to /kaggle/working.
 
+Per-word timings are derived offline from the saved asr-words-NNN.json streams
+with tools/kaggle-timing/emit_word_timings.py (no GPU needed).
+
 Nothing here is site-specific beyond the two public base URLs, so the same file
 can be reused as-is for all 114 surahs by extending SURAHS.
 """

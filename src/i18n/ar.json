@@ -98,7 +98,13 @@
     "textSize": "حجم الخط",
     "sizeBase": "عادي",
     "sizeLarge": "كبير",
-    "sizeXLarge": "أكبر"
+    "sizeXLarge": "أكبر",
+    "layout": "نمط العرض",
+    "layoutList": "قائمة",
+    "layoutMushaf": "مصحف",
+    "effect": "تأثير القراءة",
+    "effectFade": "لون باهت",
+    "effectReveal": "ظهور تدريجي"
   },
   "reader": {
     "title": "نص السورة",

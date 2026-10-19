@@ -2,9 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
-import type { AyahTiming, QalunSurah } from "@/lib/types";
+import type { AyahTiming, QalunSurah, SurahWordTimings } from "@/lib/types";
 import { ChevronStart } from "@/components/ui/icons";
-import { AyahList } from "./AyahList";
+import { AyahText } from "./AyahText";
 
 const SOURCE_URL = "https://github.com/iptvchecker/content-quran-json";
 
@@ -36,6 +36,18 @@ function loadTimings(number: number): AyahTiming[] {
       "quran",
       "timings",
       `${String(number).padStart(3, "0")}.json`
+    ) ?? []
+  );
+}
+
+function loadWords(number: number): SurahWordTimings {
+  return (
+    loadJson<SurahWordTimings>(
+      "src",
+      "data",
+      "quran",
+      "timings",
+      `words-${String(number).padStart(3, "0")}.json`
     ) ?? []
   );
 }
@@ -78,9 +90,10 @@ export function AyahReader({
           <p className="mt-2 text-xs text-muted">{dict.reader.note}</p>
         )}
 
-        <AyahList
+        <AyahText
           ayat={data.ayat}
           timings={loadTimings(surah)}
+          words={loadWords(surah)}
           surah={surah}
           jumpLabel={dict.reader.jump}
         />

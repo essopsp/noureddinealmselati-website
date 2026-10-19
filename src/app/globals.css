@@ -70,6 +70,114 @@ html[data-textsize="xlarge"] {
   line-height: 2.15;
 }
 
+/* ------------------------------------------------------------------ *
+ * نص السورة: نمط «قائمة» (افتراضي) ونمط «مصحف» (نص متصل مضبوط)
+ * التبديل بسمة data-layout على <html> — بنية DOM واحدة للوضعين.
+ * ------------------------------------------------------------------ */
+.ayah {
+  display: block;
+  position: relative;
+  margin-block: 0.9rem;
+  padding-inline-start: 2.7rem;
+  border-radius: 0.75rem;
+  transition: background-color 200ms ease;
+}
+
+html[data-layout="mushaf"] .mushaf-text {
+  text-align: justify;
+  text-align-last: right;
+  hyphens: none;
+}
+
+html[data-layout="mushaf"] .ayah {
+  display: inline;
+  position: static;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* الآية الجارية: خلفية خفيفة */
+.ayah[data-active] {
+  background-color: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+html:not([data-layout="mushaf"]) .ayah[data-active] {
+  background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* فاصل الآية: الوردة القرآنية والخط يرسم الرقم داخلها */
+.ayah-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-soft);
+  font-size: 1.05em;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: color 200ms ease, transform 200ms ease;
+}
+
+.ayah-mark:hover {
+  color: var(--accent);
+  transform: scale(1.08);
+}
+
+/* نمط القائمة: الوردة شارة ثابتة في بداية سطر الآية */
+html:not([data-layout="mushaf"]) .ayah-mark {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.15rem;
+  font-size: 1.45em;
+}
+
+/* ------------------------------------------------------------------ *
+ * تلوين الكلمات أثناء التلاوة: باهت ← مكتمل، والكلمة الجارية بلون التمييز
+ * ------------------------------------------------------------------ */
+.w {
+  transition: color 260ms ease, opacity 260ms ease;
+}
+
+/* أثناء التلاوة: الكلمات القادمة باهتة، والمقروءة كاملة */
+html[data-effect="fade"] .w {
+  color: var(--muted);
+}
+
+html[data-effect="reveal"] .w {
+  opacity: 0;
+}
+
+.w.done {
+  color: var(--ink);
+  opacity: 1;
+}
+
+.w.now {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* خارج التلاوة (قراءة عادية): النص كامل الوضوح، وموضع التوقف يبقى مميَّزًا */
+.mushaf-text:not([data-live]) .w:not(.now) {
+  color: var(--ink);
+  opacity: 1;
+}
+
+.mushaf-text:not([data-live]) .w.now {
+  color: var(--accent);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w {
+    transition: none;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }

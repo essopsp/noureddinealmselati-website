@@ -98,7 +98,13 @@
     "textSize": "Text size",
     "sizeBase": "Normal",
     "sizeLarge": "Large",
-    "sizeXLarge": "Larger"
+    "sizeXLarge": "Larger",
+    "layout": "Layout",
+    "layoutList": "List",
+    "layoutMushaf": "Mushaf",
+    "effect": "Reading effect",
+    "effectFade": "Faded",
+    "effectReveal": "Reveal"
   },
   "reader": {
     "title": "Surah text",
