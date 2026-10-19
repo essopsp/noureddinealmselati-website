@@ -61,7 +61,10 @@ export function PlayerBar() {
     "inline-flex h-12 w-12 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface hover:text-accent disabled:opacity-40";
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/95 backdrop-blur">
+    <div
+      data-player-bar
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/95 backdrop-blur"
+    >
       <div className="safe-bottom mx-auto flex w-full max-w-5xl flex-col gap-0.5 px-3 pt-2 sm:px-6">
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button

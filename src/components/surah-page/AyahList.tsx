@@ -48,10 +48,27 @@ export function AyahList({
     const list = listRef.current;
     const el = list?.children[active] as HTMLElement | undefined;
     if (!list || !el || el.offsetParent === null) return;
-    // لا نسحب الصفحة إن كان القارئ قد مرّر بعيدًا عن النص
-    const box = list.getBoundingClientRect();
-    if (box.bottom <= 0 || box.top >= window.innerHeight) return;
-    el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+
+    // المساحة المرئية فعليًا فوق شريط المشغّل الثابت
+    const bar = document.querySelector<HTMLElement>("[data-player-bar]");
+    const bottomInset = bar
+      ? Math.max(0, window.innerHeight - bar.getBoundingClientRect().top)
+      : 0;
+    const top = 12;
+    const bottom = window.innerHeight - bottomInset - 12;
+    const rect = el.getBoundingClientRect();
+
+    // الآية ظاهرة بالكامل → لا نحرّك الصفحة
+    if (rect.top >= top && rect.bottom <= bottom) return;
+
+    const room = Math.max(240, bottom - top);
+    const target =
+      window.scrollY + rect.top - top - Math.min(rect.height, room) * 0.25;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({
+      top: Math.max(0, target),
+      behavior: reduce ? "auto" : "smooth",
+    });
   }, [active, playing]);
 
   return (
